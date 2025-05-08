@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class InvoiceWebViewImpl extends StatefulWidget {
   final String url;
@@ -24,7 +22,6 @@ class _InvoiceWebViewImplState extends State<InvoiceWebViewImpl> {
   late WebViewController _controller;
   bool _isLoading = true;
   String _errorMessage = '';
-  String _currentUrl = '';
 
   @override
   void initState() {
@@ -33,76 +30,47 @@ class _InvoiceWebViewImplState extends State<InvoiceWebViewImpl> {
   }
 
   void _initializeWebView() {
-    // Initialize the controller with advanced settings
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
-            print('Navigating to: $url');
+            print('Loading page: $url');
             setState(() {
               _isLoading = true;
-              _currentUrl = url;
             });
           },
           onPageFinished: (String url) {
-            _injectUserIdData();
+            print('Page loaded: $url');
+            _injectMobileAppData();
             setState(() {
               _isLoading = false;
             });
           },
           onWebResourceError: (WebResourceError error) {
+            print('WebView error: ${error.description}');
             setState(() {
               _isLoading = false;
               _errorMessage = 'Error: ${error.description}';
             });
           },
-          // Allow all navigation but log it for debugging
           onNavigationRequest: (NavigationRequest request) {
             print('Navigation request to: ${request.url}');
             return NavigationDecision.navigate;
           },
         ),
       )
-      ..setUserAgent('Flutter InvoiceApp Mobile WebView');
-    
-    // Load the authentication URL directly - it will redirect to create_invoice.php
-    _loadAuthUrl();
-  }
-
-  // Load the authentication URL which will redirect to create_invoice.php
-  Future<void> _loadAuthUrl() async {
-    if (widget.userId.isEmpty) {
-      setState(() {
-        _errorMessage = 'Error: No user ID provided';
-      });
-      return;
-    }
-
-    try {
-      await _controller.loadRequest(Uri.parse(widget.url));
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Authentication error: $e';
-      });
-    }
+      ..setUserAgent('Flutter InvoiceApp Mobile WebView')
+      ..loadRequest(Uri.parse(widget.url));
   }
   
-  Future<void> _injectUserIdData() async {
+  Future<void> _injectMobileAppData() async {
     try {
       await _controller.runJavaScript('''
-        // Set a global variable with authentication data
-        window.mobileAppAuth = {
-          userId: '${widget.userId}',
-          authenticated: true,
-          mobileApp: true
-        };
+        // Set mobile app flag
+        window.mobileApp = true;
         
-        // If there's a user_id field, set its value
-        const userIdFields = document.querySelectorAll('[name="user_id"]');
-        userIdFields.forEach(field => field.value = '${widget.userId}');
-        
-        // If there's a form, add user_id as hidden field if not present
+        // Ensure user_id is set in all forms
         const forms = document.querySelectorAll('form');
         forms.forEach(form => {
           if (!form.querySelector('[name="user_id"]')) {
@@ -123,7 +91,7 @@ class _InvoiceWebViewImplState extends State<InvoiceWebViewImpl> {
         });
       ''');
     } catch (e) {
-      print('Error injecting user data: $e');
+      print('Error injecting mobile app data: $e');
     }
   }
 
@@ -163,8 +131,9 @@ class _InvoiceWebViewImplState extends State<InvoiceWebViewImpl> {
                     onPressed: () {
                       setState(() {
                         _errorMessage = '';
+                        _isLoading = true;
                       });
-                      _loadAuthUrl();
+                      _controller.reload();
                     },
                     child: const Text('Try Again'),
                   ),

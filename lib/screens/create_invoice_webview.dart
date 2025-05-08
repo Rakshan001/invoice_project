@@ -43,8 +43,8 @@ class _CreateInvoiceWebViewState extends State<CreateInvoiceWebView> {
     
     final baseUrl = authProvider.webServerUrl;
     
-    // Use the mobile authentication endpoint instead of directly accessing create_invoice.php
-    url = "$baseUrl/invoice_management_project/mobile_auth.php?user_id=$userId";
+    // Connect directly to mobile_create_invoice.php
+    url = "$baseUrl/invoice_management_project/mobile_create_invoice.php?user_id=$userId&mobile_app=true";
     
     setState(() {
       isLoading = false;

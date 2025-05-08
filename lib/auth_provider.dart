@@ -54,11 +54,11 @@ class AuthProvider with ChangeNotifier {
       // return 'http://10.0.2.2'; // This maps to localhost on your development machine
       
       // When running on a real Android device, use your computer's IP address
-      return 'https://0ce4-103-182-124-79.ngrok-free.app'; // Replace with your computer's IP on the network
+      return 'https://8008-103-182-124-129.ngrok-free.app'; // Replace with your computer's IP on the network
     }
     
     // Default fallback
-    return 'https://0ce4-103-182-124-79.ngrok-free.app';
+    return 'https://8008-103-182-124-129.ngrok-free.app.ngrok-free.app';
   }
   
   bool get isAuthenticated => _token != null;
