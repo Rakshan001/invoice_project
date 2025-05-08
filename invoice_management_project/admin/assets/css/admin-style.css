@@ -1,0 +1,208 @@
+/* Admin Theme Colors */
+:root {
+    --primary-color: #4e73df;
+    --secondary-color: #1cc88a;
+    --warning-color: #f6c23e;
+    --danger-color: #e74a3b;
+    --info-color: #36b9cc;
+    --dark-color: #5a5c69;
+    --body-bg: #f8f9fc;
+    --card-border-radius: 0.75rem;
+    --transition-speed: 0.3s;
+}
+
+/* General Styles */
+body {
+    background-color: var(--body-bg);
+    font-family: 'Nunito', sans-serif;
+}
+
+/* Navbar Styles */
+.admin-navbar {
+    background: linear-gradient(45deg, #1e3c72 0%, #2a5298 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.admin-navbar .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.admin-navbar .nav-link {
+    position: relative;
+    padding: 0.75rem 1rem !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+}
+
+.admin-navbar .nav-link:hover,
+.admin-navbar .nav-link.active {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    border-radius: var(--card-border-radius);
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    transition: transform var(--transition-speed);
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.stats-card {
+    overflow: hidden;
+    position: relative;
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1));
+    transform: skewX(-30deg);
+}
+
+.stats-icon {
+    position: absolute;
+    right: 1.5rem;
+    bottom: -1rem;
+    font-size: 4rem;
+    opacity: 0.2;
+}
+
+.stats-card .card-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Gradient Backgrounds */
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(45deg, #1cc88a 0%, #13855c 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(45deg, #f6c23e 0%, #dda20a 100%);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(45deg, #e74a3b 0%, #be2617 100%);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(45deg, #36b9cc 0%, #258391 100%);
+}
+
+/* Table Styles */
+.table-card {
+    background: #fff;
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+}
+
+.table-card .card-header {
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 1.25rem 1.5rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(78, 115, 223, 0.05);
+}
+
+.table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    color: var(--dark-color);
+    border-top: none;
+}
+
+/* Badge Styles */
+.badge {
+    padding: 0.5em 1em;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border-radius: 50rem;
+}
+
+.badge.bg-success {
+    background: linear-gradient(45deg, #1cc88a 0%, #13855c 100%) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(45deg, #f6c23e 0%, #dda20a 100%) !important;
+    color: #fff !important;
+}
+
+/* Page Title */
+.page-title {
+    color: var(--dark-color);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.page-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 50px;
+    background: var(--primary-color);
+    border-radius: 50px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #224abe;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    
+    .table-responsive {
+        border-radius: var(--card-border-radius);
+    }
+} 

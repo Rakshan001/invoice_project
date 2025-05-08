@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../auth_provider.dart';
+import 'create_invoice_webview.dart';
 
 class InvoiceManagementPage extends StatelessWidget {
   const InvoiceManagementPage({Key? key}) : super(key: key);
@@ -191,7 +192,12 @@ class InvoiceManagementPage extends StatelessWidget {
                   icon: Icons.add,
                   label: 'Create Invoice',
                   onPressed: () {
-                    // Placeholder for create invoice route
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CreateInvoiceWebView(),
+                      ),
+                    );
                   },
                 ),
                 ExpandedNavigationButton(

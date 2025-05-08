@@ -1,0 +1,9 @@
+{
+    "name": "invoice/management-system",
+    "description": "Invoice Management System",
+    "type": "project",
+    "require": {
+        "tecnickcom/tcpdf": "^6.6",
+        "phpmailer/phpmailer": "^6.8"
+    }
+}

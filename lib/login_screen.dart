@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     // Pre-fill with test data for easier testing
     _emailController.text = 'srisha2373@gmail.com';
-    _passwordController.text = 'password123';
+    _passwordController.text = 'Shri2373';
   }
 
   void _login() async {

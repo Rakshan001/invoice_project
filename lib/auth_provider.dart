@@ -8,6 +8,7 @@ import 'dart:io' show Platform;
 class AuthProvider with ChangeNotifier {
   final _storage = const FlutterSecureStorage();
   String? _token;
+  String? _sessionToken; // Add session token for web authentication
   int? _userId;
   String? _email;
   String? _fullName;
@@ -19,7 +20,7 @@ class AuthProvider with ChangeNotifier {
   String get baseUrl {
     // For web (Chrome) testing, use the standard URL
     if (kIsWeb) {
-      return 'http://192.168.1.4/invoice_settings';
+      return 'https://8008-103-182-124-129.ngrok-free.app/invoice_management_project';
     }
     
     // For Android emulator, use 10.0.2.2 which maps to host's localhost
@@ -31,20 +32,39 @@ class AuthProvider with ChangeNotifier {
       
       if (useLocalNetwork) {
         // Use the IP address your phone can access
-        return 'http://192.168.1.4/invoice_settings'; 
+        return 'https://8008-103-182-124-129.ngrok-free.app/invoice_management_project'; 
       } else {
         // For emulator use 10.0.2.2
-        return 'http://10.0.2.2/invoice_settings';
+        return 'https://8008-103-182-124-129.ngrok-free.app/invoice_management_project';
       }
     }
     
     // Default fallback
-    return 'http://192.168.1.4/invoice_settings';
+    return 'https://8008-103-182-124-129.ngrok-free.app/invoice_management_project';
+  }
+  
+  // Get the web server URL (may be different from API URL)
+  String get webServerUrl {
+    // Update this with your actual web server URL
+    // Use your localhost address for development or your real server for production
+    if (kIsWeb) {
+      return 'http://localhost'; // Use this for web testing
+    } else if (Platform.isAndroid) {
+      // When running on Android emulator
+      // return 'http://10.0.2.2'; // This maps to localhost on your development machine
+      
+      // When running on a real Android device, use your computer's IP address
+      return 'https://0ce4-103-182-124-79.ngrok-free.app'; // Replace with your computer's IP on the network
+    }
+    
+    // Default fallback
+    return 'https://0ce4-103-182-124-79.ngrok-free.app';
   }
   
   bool get isAuthenticated => _token != null;
   bool get isInitialized => _isInitialized;
   String? get token => _token;
+  String? get sessionToken => _sessionToken;
   int? get userId => _userId;
   String? get email => _email;
   String? get fullName => _fullName;
@@ -58,6 +78,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> _loadUserData() async {
     try {
       _token = await _storage.read(key: 'remember_token');
+      _sessionToken = await _storage.read(key: 'session_token');
       final userIdStr = await _storage.read(key: 'user_id');
       _userId = userIdStr != null ? int.tryParse(userIdStr) : null;
       _email = await _storage.read(key: 'email');
@@ -96,7 +117,7 @@ class AuthProvider with ChangeNotifier {
         return {'status': 'error', 'message': 'Password is required'};
       }
       
-      final loginUrl = '$baseUrl/login.php';
+      final loginUrl = '$baseUrl/mobile_login.php';
       debugPrint('Attempting to login with email: $email');
       debugPrint('Making POST request to: $loginUrl');
       
@@ -147,6 +168,16 @@ class AuthProvider with ChangeNotifier {
             await _storage.write(key: 'remember_token', value: _token);
           }
           
+          // Save session token if available
+          if (userData['session_token'] != null) {
+            _sessionToken = userData['session_token'];
+            await _storage.write(key: 'session_token', value: _sessionToken);
+          } else if (userData['PHPSESSID'] != null) {
+            // Fallback to PHP session ID if provided
+            _sessionToken = userData['PHPSESSID'];
+            await _storage.write(key: 'session_token', value: _sessionToken);
+          }
+          
           // Save user data to secure storage
           await _storage.write(key: 'user_id', value: _userId.toString());
           await _storage.write(key: 'email', value: _email);
@@ -189,12 +220,14 @@ class AuthProvider with ChangeNotifier {
       _email = email;
       _fullName = 'Demo User';
       _token = 'demo_token';
+      _sessionToken = 'demo_session'; // Add a demo session token
       
       // Save to secure storage
       await _storage.write(key: 'user_id', value: _userId.toString());
       await _storage.write(key: 'email', value: _email);
       await _storage.write(key: 'full_name', value: _fullName);
       await _storage.write(key: 'remember_token', value: _token);
+      await _storage.write(key: 'session_token', value: _sessionToken);
       
       notifyListeners();
       return {'status': 'success'};
@@ -206,17 +239,19 @@ class AuthProvider with ChangeNotifier {
   // Add a method to get current user info that can be used by other screens
   Map<String, dynamic> getCurrentUserInfo() {
     return {
-      'userId': _userId,
+      'userId': _userId != null ? _userId.toString() : "",
       'email': _email,
       'fullName': _fullName,
-      'companyId': _companyId,
+      'companyId': _companyId != null ? _companyId.toString() : "",
       'companyName': _companyName,
       'isAuthenticated': isAuthenticated,
+      'sessionToken': _sessionToken, // Include the session token
     };
   }
 
   Future<void> logout() async {
     _token = null;
+    _sessionToken = null;
     _userId = null;
     _email = null;
     _fullName = null;

@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:invoice_project/landing.dart';
 import 'package:invoice_project/screens/invoice_management_page.dart';
 import 'package:invoice_project/screens/quotation_management_page.dart';
+import 'package:invoice_project/screens/create_invoice_webview.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
+import 'package:webview_flutter/webview_flutter.dart';
 import 'auth_provider.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 
 void main() {
+  // Initialize WebView only on mobile platforms
+  if (!kIsWeb) {
+    WebViewPlatform.instance;
+  }
+  
   runApp(
     ChangeNotifierProvider(
       create: (context) => AuthProvider(),
@@ -47,6 +56,7 @@ class MyApp extends StatelessWidget {
                 const Scaffold(body: Center(child: Text('Settings Screen'))),
         '/invoices': (context) => const InvoiceManagementPage(),
         '/quotations': (context) => const QuotationManagementPage(),
+        '/create_invoice': (context) => const CreateInvoiceWebView(),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
