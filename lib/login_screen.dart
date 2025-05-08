@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    
+
     Map<String, dynamic> result;
     if (_useOfflineMode) {
       result = await authProvider.loginOffline(
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = false;
       if (result['status'] == 'error') {
         _errorMessage = result['message'];
-        
+
         // Show option for offline login if there's a connection error
         if (_errorMessage!.contains('Connection error')) {
           _showOfflineLoginDialog();
@@ -66,35 +66,36 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     });
   }
-  
+
   void _showOfflineLoginDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Connection Error'),
-        content: const Text(
-          'Unable to connect to the server. Would you like to use offline mode? '
-          'Note: Some features may be limited in offline mode.'
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('CANCEL'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Connection Error'),
+            content: const Text(
+              'Unable to connect to the server. Would you like to use offline mode? '
+              'Note: Some features may be limited in offline mode.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('CANCEL'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  setState(() {
+                    _useOfflineMode = true;
+                  });
+                  _login();
+                },
+                child: const Text('USE OFFLINE MODE'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                _useOfflineMode = true;
-              });
-              _login();
-            },
-            child: const Text('USE OFFLINE MODE'),
-          ),
-        ],
-      ),
     );
   }
 
@@ -122,14 +123,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const CircleAvatar(
-                      radius: 35,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.file_copy,
-                        size: 30,
-                        color: Color(0xFF5E5CE6),
-                      ),
+                    CircleAvatar(
+                      radius: 55,
+                      backgroundColor: const Color(0xFF4E73DF),
+                      // child: Icon(
+                      //   Icons.file_copy,
+                      //   size: 30,
+                      //   color: Color(0xFF5E5CE6),
+                      // ),
+                      child: Image.asset('assets/images/logo.png', height: 140),
                     ),
                     const SizedBox(height: 16),
                     const Text(

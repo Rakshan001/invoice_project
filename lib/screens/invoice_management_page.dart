@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../auth_provider.dart';
 import 'create_invoice_webview.dart';
+import 'clients_view.dart';
+import 'invoices_view.dart';
+import 'analytics_view.dart';
+import 'company_details_view.dart';
+import 'bank_details_view.dart';
 
 class InvoiceManagementPage extends StatelessWidget {
   const InvoiceManagementPage({Key? key}) : super(key: key);
@@ -15,7 +20,10 @@ class InvoiceManagementPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Invoice Management'),
+        title: const Text(
+          'Invoice Management',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: const Color(0xFF4E73DF),
         actions: [
           Padding(
@@ -25,7 +33,7 @@ class InvoiceManagementPage extends StatelessWidget {
               child: Text(
                 fullName.isNotEmpty ? fullName[0].toUpperCase() : 'U',
                 style: const TextStyle(
-                  color: Color(0xFF4E73DF),
+                  color: Color.fromARGB(255, 255, 255, 255),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -52,7 +60,9 @@ class InvoiceManagementPage extends StatelessWidget {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        backgroundColor: const Color(0xFF4E73DF).withOpacity(0.1),
+                        backgroundColor: const Color(
+                          0xFF4E73DF,
+                        ).withOpacity(0.1),
                         child: const Icon(
                           Icons.person,
                           color: Color(0xFF4E73DF),
@@ -130,15 +140,26 @@ class InvoiceManagementPage extends StatelessWidget {
                 ExpandedNavigationButton(
                   icon: Icons.apartment,
                   label: 'Company',
+                  hasFileUpload: true,
                   onPressed: () {
-                    // Placeholder for company route
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CompanyDetailsView(),
+                      ),
+                    );
                   },
                 ),
                 ExpandedNavigationButton(
                   icon: Icons.account_balance,
                   label: 'Bank Details',
                   onPressed: () {
-                    // Placeholder for bank details route
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BankDetailsView(),
+                      ),
+                    );
                   },
                 ),
                 ExpandedNavigationButton(
@@ -178,14 +199,24 @@ class InvoiceManagementPage extends StatelessWidget {
                   icon: Icons.group,
                   label: 'Clients',
                   onPressed: () {
-                    // Placeholder for clients route
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ClientsView(),
+                      ),
+                    );
                   },
                 ),
                 ExpandedNavigationButton(
                   icon: Icons.file_copy,
                   label: 'Invoices',
                   onPressed: () {
-                    Navigator.pushNamed(context, '/invoices');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const InvoicesView(),
+                      ),
+                    );
                   },
                 ),
                 ExpandedNavigationButton(
@@ -204,7 +235,12 @@ class InvoiceManagementPage extends StatelessWidget {
                   icon: Icons.analytics,
                   label: 'Analytics',
                   onPressed: () {
-                    // Placeholder for analytics route
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AnalyticsView(),
+                      ),
+                    );
                   },
                 ),
               ],
@@ -249,6 +285,7 @@ class ExpandedNavigationButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final bool isFullWidth;
+  final bool hasFileUpload;
 
   const ExpandedNavigationButton({
     Key? key,
@@ -256,6 +293,7 @@ class ExpandedNavigationButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.isFullWidth = false,
+    this.hasFileUpload = false,
   }) : super(key: key);
 
   @override
@@ -270,7 +308,17 @@ class ExpandedNavigationButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: onPressed,
         icon: Icon(icon, size: 16),
-        label: Text(label),
+        label: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(label),
+            if (hasFileUpload)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Icon(Icons.file_upload, size: 14),
+              ),
+          ],
+        ),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF4E73DF),
           foregroundColor: Colors.white,

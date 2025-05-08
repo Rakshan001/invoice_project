@@ -78,7 +78,7 @@ class _LandingScreenState extends State<LandingScreen>
       appBar: AppBar(
         title: Image.asset(
           'assets/images/logo.png',
-          height: 40,
+          height: 140,
           errorBuilder:
               (_, __, ___) =>
                   const Icon(Icons.business, size: 40, color: Colors.white),
