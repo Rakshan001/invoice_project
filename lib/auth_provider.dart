@@ -20,7 +20,7 @@ class AuthProvider with ChangeNotifier {
   String get baseUrl {
     // For web (Chrome) testing, use the standard URL
     if (kIsWeb) {
-      return 'https://8008-103-182-124-129.ngrok-free.app/invoice_management_project';
+      return 'https://5405-103-182-124-121.ngrok-free.app/invoice_management_project';
     }
     
     // For Android emulator, use 10.0.2.2 which maps to host's localhost
@@ -32,15 +32,15 @@ class AuthProvider with ChangeNotifier {
       
       if (useLocalNetwork) {
         // Use the IP address your phone can access
-        return 'https://8008-103-182-124-129.ngrok-free.app/invoice_management_project'; 
+        return 'https://5405-103-182-124-121.ngrok-free.app/invoice_management_project'; 
       } else {
         // For emulator use 10.0.2.2
-        return 'https://8008-103-182-124-129.ngrok-free.app/invoice_management_project';
+        return 'https://5405-103-182-124-121.ngrok-free.app/invoice_management_project';
       }
     }
     
     // Default fallback
-    return 'https://8008-103-182-124-129.ngrok-free.app/invoice_management_project';
+    return 'https://5405-103-182-124-121.ngrok-free.app/invoice_management_project';
   }
   
   // Get the web server URL (may be different from API URL)
@@ -54,11 +54,11 @@ class AuthProvider with ChangeNotifier {
       // return 'http://10.0.2.2'; // This maps to localhost on your development machine
       
       // When running on a real Android device, use your computer's IP address
-      return 'https://8008-103-182-124-129.ngrok-free.app'; // Replace with your computer's IP on the network
+      return 'https://5405-103-182-124-121.ngrok-free.app'; // Replace with your computer's IP on the network
     }
     
     // Default fallback
-    return 'https://8008-103-182-124-129.ngrok-free.app.ngrok-free.app';
+    return 'https://5405-103-182-124-121.ngrok-free.app';
   }
   
   bool get isAuthenticated => _token != null;
